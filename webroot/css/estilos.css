@@ -1,0 +1,53 @@
+table,td,th{
+    border: 1px black solid;
+    border-collapse: collapse;
+}
+table{width: 100%;
+      text-align: center;
+      
+}
+#ejercicios{
+    margin-bottom: 100px;
+}
+td img{
+    height:25px; 
+    width:25px;  
+}
+h2{
+    background-color: skyblue;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+ul{
+    list-style: none;
+    background-color: skyblue;
+}
+footer{
+    position: fixed;
+    bottom: 0%;
+    width: 100%;
+    text-align: center;
+    background-color: skyblue;
+}
+footer img{
+    height:25px; 
+    width:25px;
+}
+*{
+    font-family: 'Comic Sans MS';
+}
+#modulos{
+    columns: 2;
+    
+}
+.modulo{
+    text-decoration: none;
+    color: black;
+    border: 1px black solid;
+}
+.modulo a{
+    text-decoration: none;
+    color: black;
+}
