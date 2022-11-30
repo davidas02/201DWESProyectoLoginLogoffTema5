@@ -1,8 +1,4 @@
 <?php
-if (isset($_REQUEST['volver'])) {
-    header('Location: ../../201DWESProyectoDWES/indexProyectoDWES.php');
-    exit;
-}
 if(isset($_REQUEST['iniciarSesion'])){
     header('Location: programa.php');
     exit;
@@ -23,9 +19,9 @@ if(isset($_REQUEST['iniciarSesion'])){
         </head>
     <body>
         <header>
-            <h1>Tema 5 DESARROLLO DE APLICACIONES WEB UTILIZANDO CÓDIGO EMBEBIDO</h1>
+            <h1>Tema 5 Proyecto LoginLogoff</h1>
             <div id="nav">
-                <h2>1. Desarrollo de un control de acceso con identificación del usuario basado en la función header().</h2>
+                <h2>Login</h2>
             </div>
         </header>
         <div id="ejercicios">
@@ -33,25 +29,22 @@ if(isset($_REQUEST['iniciarSesion'])){
                 <table class="formulario">
                     <tr>
                         <td><label for="usuario">Usuario:</label></td>
-                        <td><input type="text" name="usuario" class="entradadatos"/></td>
+                        <td><input type="text" name="usuario" class="usuario"/></td>
                     </tr>
                     <tr>
                         <td><label for="password">Password:</label></td>
-                        <td><input type="password" name="password" class="entradadatos" /></td>
+                        <td><input type="password" name="password" class="password" /></td>
                     </tr>
                     <tr>
                         <td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="submit" id="volver" value="Volver" name="volver"></td>
                     </tr>
                 </table>
             </form>
         </div>
     <footer> 
         <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
-        <a href="../indexProyectoTema5.php"><img src="../doc/img/home.png" alt="HOME"/></a>
-        <a href="https://www.github.com/davidas02" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
+        <a href="../../201DWESProyectoDWES/indexProyectoDWES.php"><img src="../doc/img/home.png" alt="HOME"/></a>
+        <a href="https://www.github.com/davidas02/201DWESProyectoLoginLogoffTema5" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
         <p>2022-2023 David Aparicio Sir &COPY; Todos los derechos reservados</p>
     </footer>
 </body>
