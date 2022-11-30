@@ -16,5 +16,5 @@ create table if not exists T02_Departamento(
     T02_volumenNegocio float NULL,
     T02_fechaAlta datetime NULL 
 )engine=Innodb;
-create user if not exists "userDAW201AppLoginLogoff"@"%" identified by "paso";
+create user if not exists 'userDAW201AppLoginLogoff'@'%' identified by "paso";
 grant all privileges on DAW201DBProyectoLoginLogoffTema5.* to 'userDAW201AppLoginLogoff'@'%';

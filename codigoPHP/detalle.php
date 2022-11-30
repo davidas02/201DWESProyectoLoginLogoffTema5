@@ -155,7 +155,7 @@ if (isset($_REQUEST['volver'])) {
         </div>
         <footer> 
             <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
-            <a href="../indexProyectoTema5.php"><img src="../doc/img/home.png" alt="HOME"/></a>
+            <a href="../indexProyectoTema5.php"><img src="../doc/img/home.png" alt="HOME" hidden="true"/></a>
             <a href="https://www.github.com/davidas02/201DWESProyectoLoginLogoffTema5" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
             <p>2022-2023 David Aparicio Sir &COPY; Todos los derechos reservados</p>
         </footer>

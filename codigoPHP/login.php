@@ -1,22 +1,69 @@
 <?php
-if(isset($_REQUEST['iniciarSesion'])&&$entradaOK){
+if (isset($_REQUEST['iniciarSesion'])) {
     header('Location: programa.php');
     exit;
-}
+}            require_once '../core/221024libreriaValidacionFormularios.php';
+            require_once '../conf/confDBPDOCasa.php';
+            $entradaOK = true;
+            define("MAX_TAMANYO", 8);
+            define("MIN_TAMANYO", 4);
+            define("OBLIGATORIO", 1);
+            $aRespuestas = [
+                'usuario' => "",
+                'password' => ""
+            ];
+            $aErrores = [
+                'usuario' => "",
+                'password' => ""
+            ];
+            if (isset($_REQUEST['iniciarSesion'])) {
+                $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], MAX_TAMANYO, MIN_TAMANYO, OBLIGATORIO);
+                $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], MAX_TAMANYO, MIN_TAMANYO, 2, OBLIGATORIO);
+                $sql1= <<<SQL
+                        Select * from T01_Usuarios where T01_CodUsuario='$_REQUEST[usuario]';
+                        SQL ;
+                try {
+                    $miDB = new PDO(DSN, USER, PASS);
+                    $statement1 = $miDB->prepare($sql1);
+                    $statement1->execute();
+                    $oUsuario = $statement1->fetchObject();
+                    if ($statement1->rowCount()==0) {
+                        $aErrores['password']="Error en el login";
+                    }
+                    if (!$oUsuario) {
+                        $entradaOK=false;
+                    }
+                } catch (PDOException $PDOexc) {
+                    echo $PDOexc->getMessage();
+                } finally {
+                    unset($miDB);
+                }
+                foreach ($aErrores as $campo=>$valor) {
+                    if ($error != null) {
+                        $_REQUEST[$campo]="";
+                        $entradaOK = false;
+                    }
+                }
+            } else {
+                $entradaOK = false;
+            }
+            if ($entradaOK) {
+                
+            } else {
 ?>
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Tema 5 ejercicio 1 David Aparicio</title>
-            <link rel="stylesheet" href="../webroot/css/estilos.css"/>
-            <link rel="icon" type="image/x-icon" href="../doc/img/favicon.ico"/>
-            <style>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tema 5 ejercicio 1 David Aparicio</title>
+        <link rel="stylesheet" href="../webroot/css/estilos.css"/>
+        <link rel="icon" type="image/x-icon" href="../doc/img/favicon.ico"/>
+        <style>
             table,th,td{
                 border: none;
             }
         </style>
-        </head>
+    </head>
     <body>
         <header>
             <h1>Tema 5 Proyecto LoginLogoff</h1>
@@ -24,46 +71,31 @@ if(isset($_REQUEST['iniciarSesion'])&&$entradaOK){
                 <h2>Login</h2>
             </div>
         </header>
-        <div id="ejercicios"><?php
-        $entradaOK=true;
-        $aRespuestas=[
-            'usuario'=>"",
-            'password'=>""
-        ];
-        $aErrores=[
-            'usuario'=>"",
-            'password'=>""
-        ];
-        $sql1 = <<< sql
-             select T01_CodUsuario,T01_Password from T01_Usuario where T01_CodUsuario='$_SERVER[PHP_AUTH_USER]';
-            sql;
-        if(isset($_REQUEST['iniciarSesion'])){
-            
-        }else{
-            $entradaOK=false;
+        <div id="ejercicios">
+                <form name="ejercicio21" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                    <table class="formulario">
+                        <tr>
+                            <td><label for="usuario">Usuario:</label></td>
+                            <td><input type="text" name="usuario" class="usuario" value="<?php echo $_REQUEST['usuario']?>"/><span style="color: red"><?php echo $aErrores['usuario'];?></span></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password">Password:</label></td>
+                            <td><input type="password" name="password" class="password" value="<?php echo $_REQUEST['password']?>"/><span style="color: red"><?php echo $aErrores['password'];?></span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <?php
         }
         ?>
-        <form name="ejercicio21" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                <table class="formulario">
-                    <tr>
-                        <td><label for="usuario">Usuario:</label></td>
-                        <td><input type="text" name="usuario" class="usuario"/></td>
-                    </tr>
-                    <tr>
-                        <td><label for="password">Password:</label></td>
-                        <td><input type="password" name="password" class="password" /></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-    <footer> 
-        <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
-        <a href="../../201DWESProyectoDWES/indexProyectoDWES.php"><img src="../doc/img/home.png" alt="HOME"/></a>
-        <a href="https://www.github.com/davidas02/201DWESProyectoLoginLogoffTema5" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
-        <p>2022-2023 David Aparicio Sir &COPY; Todos los derechos reservados</p>
-    </footer>
-</body>
+        <footer> 
+            <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
+            <a href="../../201DWESProyectoDWES/indexProyectoDWES.php"><img src="../doc/img/home.png" alt="HOME"/></a>
+            <a href="https://www.github.com/davidas02/201DWESProyectoLoginLogoffTema5" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
+            <p>2022-2023 David Aparicio Sir &COPY; Todos los derechos reservados</p>
+        </footer>
+    </body>
 </html>

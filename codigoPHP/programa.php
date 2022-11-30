@@ -31,7 +31,9 @@ if(isset($_REQUEST['detalle'])){
         <div id="ejercicios">
         <form name="ejercicio21" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <table class="formulario">
+                    <?php
                     
+                    ?>
                     <tr>
                         <td colspan="2"><input type="submit" id="salir" value="Salir" name="salir"></td>
                     </tr>
@@ -43,7 +45,7 @@ if(isset($_REQUEST['detalle'])){
         </div>
     <footer> 
         <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
-        <a href="../indexProyectoTema5.php"><img src="../doc/img/home.png" alt="HOME"/></a>
+        <a href="../indexProyectoTema5.php"><img src="../doc/img/home.png" alt="HOME" hidden/></a>
         <a href="https://www.github.com/davidas02/201DWESProyectoLoginLogoffTema5" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
         <p>2022-2023 David Aparicio Sir &COPY; Todos los derechos reservados</p>
     </footer>
