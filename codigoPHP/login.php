@@ -1,5 +1,5 @@
 <?php
-if(isset($_REQUEST['iniciarSesion'])){
+if(isset($_REQUEST['iniciarSesion'])&&$entradaOK){
     header('Location: programa.php');
     exit;
 }
@@ -24,7 +24,25 @@ if(isset($_REQUEST['iniciarSesion'])){
                 <h2>Login</h2>
             </div>
         </header>
-        <div id="ejercicios">
+        <div id="ejercicios"><?php
+        $entradaOK=true;
+        $aRespuestas=[
+            'usuario'=>"",
+            'password'=>""
+        ];
+        $aErrores=[
+            'usuario'=>"",
+            'password'=>""
+        ];
+        $sql1 = <<< sql
+             select T01_CodUsuario,T01_Password from T01_Usuario where T01_CodUsuario='$_SERVER[PHP_AUTH_USER]';
+            sql;
+        if(isset($_REQUEST['iniciarSesion'])){
+            
+        }else{
+            $entradaOK=false;
+        }
+        ?>
         <form name="ejercicio21" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <table class="formulario">
                     <tr>
