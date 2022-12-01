@@ -13,27 +13,33 @@ $aErrores = [
     'usuario' => "",
     'password' => ""
 ];
+$sql1 = <<<SQL
+              Select * from T01_Usuarios where T01_CodUsuario='$_REQUEST[usuario]';
+        SQL;
+$sql2 = <<<SQL
+               update T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() where T01_CodUsuario='$_REQUEST[usuario]'; 
+            SQL;
+$ultimaCon = null;
+$conexionesAnteriores = null;
+$password=null;
 if (isset($_REQUEST['iniciarSesion'])) {
     $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], MAX_TAMANYO, MIN_TAMANYO, OBLIGATORIO);
     $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], MAX_TAMANYO, MIN_TAMANYO, 2, OBLIGATORIO);
-    $sql1 = <<<SQL
-                        Select * from T01_Usuarios where T01_CodUsuario='$_REQUEST[usuario]';
-                        SQL;
-    $sql2= <<<SQL
-               update T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() where T01_CodUsuario='$_REQUEST[usuario]'; 
-            SQL;
-    $ultimaCon=null;
-    $conexionesAnteriores=null;
+
     try {
         $miDB = new PDO(DSN, USER, PASS);
-        $statement1 = $miDB->prepare($sql1);
-        $statement1->execute();
+        $resultadoSQL1 = $miDB->prepare($sql1);
+        $resultadoSQL1->execute();
         $oUsuario = $statement1->fetchObject();
         if ($statement1->rowCount() == 0) {
-            $aErrores['password'] = "Error en el login";
-        }else{
-            $ultimaCon=$oUsuario->T01_FechaHoraUltimaConexion;
-            $conxionesAnteriores=$oUsuario->T01_NumConexiones;
+            $entradaOK = false;
+        } else {
+            $ultimaCon = $oUsuario->T01_FechaHoraUltimaConexion;
+            $conxionesAnteriores = $oUsuario->T01_NumConexiones;
+            $password=hash('sha256', ($_REQUEST['usuario'] . $_REQUEST['password']));
+            if ($_REQUEST['usuario']!=$oUsuario->T01_Cod_Usuario&&$password!=$oUsuario->T01_Password){
+                $entradaOK = false;
+            }
         }
     } catch (PDOException $PDOexc) {
         echo $PDOexc->getMessage();
@@ -50,10 +56,11 @@ if (isset($_REQUEST['iniciarSesion'])) {
     $entradaOK = false;
 }
 if ($entradaOK) {
-    $aRespuestas['usuario'] = $_REQUEST['usuario'];
-    $aRespuestas['password'] = $_REQUEST['password'];
+    session_start();
+    $_SESSION['usuarioDAW201AppLoginLogoff'];
     try {
         $miDB = new PDO(DSN, USER, PASS);
+        $actualizar=$miDB->prepare($sql2);
         
     } catch (PDOException $exc) {
         echo $exc->getMessage();
