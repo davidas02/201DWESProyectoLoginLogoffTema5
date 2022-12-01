@@ -61,10 +61,10 @@ if (isset($_REQUEST['volver'])) {
 
             //Muestra del contenido de la variable $_COOKIE con foreach()
             echo '<h2>Mostrar $_COOKIE con foreach()</h2>';
-            echo '<table><tr><th>Clave</th><th>Valor</th></th>';
+            echo '<table><tr><th>Clave</th><th>Valor</th></tr>';
             foreach ($_COOKIE as $key => $value) {
-                echo "<td><strong>" . $key . "</strong></td>";
-                echo "<td>" . $value . "</td>";
+                echo "<tr><td><strong>" . $key . "</strong></td>";
+                echo "<td>" . $value . "</td></tr>";
             }
             echo '</table>';
             echo "</br>";

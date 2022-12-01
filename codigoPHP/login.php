@@ -1,55 +1,54 @@
 <?php
 require_once '../core/221024libreriaValidacionFormularios.php';
 require_once '../conf/confDBPDODesarrollo.php';
-$entradaOK = true;
-define("MAX_TAMANYO", 8);//Tamaño maximo de las entradas alfabetica y password
-define("MIN_TAMANYO", 4);//Tamaño minimo de las entradas alfabetica y password
-define("OBLIGATORIO", 1);//Obligatoriedad
+define("MAX_TAMANYO", 8); //Tamaño maximo de las entradas alfabetica y password
+define("MIN_TAMANYO", 4); //Tamaño minimo de las entradas alfabetica y password
+define("OBLIGATORIO", 1); //Obligatoriedad
 
 $aErrores = [
     'usuario' => "",
-    'password' => ""
+    'password' => "",
+    'conexion'=>""
 ];
-$sql1 = <<<SQL
+$entradaOK = true;
+$buscarUsuario = <<<SQL
               Select * from T01_Usuarios where T01_CodUsuario=':codUsuario1';
         SQL;
-$sql2 = <<<SQL
+$actualizacion = <<<SQL
                update T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() where T01_CodUsuario=':codUsuario2'; 
             SQL;
 $ultimaCon = null;
 $conexionesAnteriores = null;
-$password=null;
+$password = null;
 if (isset($_REQUEST['iniciarSesion'])) {
-    $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'],8,4, 1);
-    $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'],8,4, 2, 1);
-    if($aErrores['usuario']==null){
-    try {
-        $miDB = new PDO(DSN, USER, PASS);
-        $resultadoSQL1 = $miDB->prepare($sql1);
-        $resultadoSQL1->bindParam(':codUsuario1', $_REQUEST['usuario']);
-        $resultadoSQL1->execute();
-        $oUsuario = $statement1->fetchObject();
-        if ($statement1->rowCount() == 0) {
-            $entradaOK = false;
-        } else {
-            $ultimaCon = $oUsuario->T01_FechaHoraUltimaConexion;
-            $conxionesAnteriores = $oUsuario->T01_NumConexiones;
-            $password=hash('sha256', ($_REQUEST['usuario'] . $_REQUEST['password']));
-            if ($_REQUEST['usuario']!=$oUsuario->T01_Cod_Usuario&&$password!=$oUsuario->T01_Password){
-                $entradaOK = false;
-                $_REQUEST['usuario']='';
-                $_REQUEST['password']='';
+    $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 8, 4, 1);
+    $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8, 4, 2, 1);
+    if ($aErrores['usuario'] == null) {
+        try {
+            $miDB = new PDO(DSN, USER, PASS);
+            $resultadoSQL1 = $miDB->prepare($buscarUsuario);
+            $resultadoSQL1->bindParam(':codUsuario1', $_REQUEST['usuario']);
+            $resultadoSQL1->execute();
+            $oUsuario = $statement1->fetchObject();
+            if (!$oUsuario) {
+                $aErrores['conexion']="Error";
+            } else {
+                $ultimaCon = $oUsuario->T01_FechaHoraUltimaConexion;
+                $conxionesAnteriores = $oUsuario->T01_NumConexiones;
+                $password = hash('sha256', ($_REQUEST['usuario'] . $_REQUEST['password']));
+                if ($_REQUEST['usuario']!=$oUsuario->T01_Cod_Usuario && $password!=$oUsuario->T01_Password) {
+                    $aErrores['conexion']="Error";
+                }
             }
+        } catch (PDOException $PDOexc) {
+            echo $PDOexc->getMessage();
+        } finally {
+            unset($miDB);
         }
-    } catch (PDOException $PDOexc) {
-        echo $PDOexc->getMessage();
-    } finally {
-        unset($miDB);
-    }
-    }
-    foreach ($aErrores as $valor) {
-        if($valor!=null){
-            $entradaOK = false;
+        foreach ($aErrores as $key => $value) {
+            if ($value != null) {
+                $entradaOK = false;
+            }
         }
     }
 } else {
@@ -57,12 +56,11 @@ if (isset($_REQUEST['iniciarSesion'])) {
 }
 if ($entradaOK) {
     session_start();
-    $_SESSION['usuarioDAW201AppLoginLogoff']=$_REQUEST['usuario'];
-    $_SESSION['passwordDAW201AppLoginLogoff']=$password;
+    $_SESSION['usuarioDAW201AppLoginLogoff'] = $_REQUEST['usuario'];
     try {
         $miDB = new PDO(DSN, USER, PASS);
-        $actualizar=$miDB->prepare($sql2);
-        $actualizar->bindParam('codUsuario2',$_REQUEST['usuario']);
+        $actualizar = $miDB->prepare($actualizacion);
+        $actualizar->bindParam('codUsuario2', $_REQUEST['usuario']);
         $actualizar->execute();
     } catch (PDOException $exc) {
         echo $exc->getMessage();
