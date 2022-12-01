@@ -1,12 +1,14 @@
 <?php
 if (isset($_REQUEST['salir'])) {
     header('Location: login.php');
+    session_destroy();
     exit;
 }
 if(isset($_REQUEST['detalle'])){
     header('Location: detalle.php');
     exit;
 }
+session_start();
 ?>
     <!DOCTYPE html>
     <html>
@@ -31,9 +33,11 @@ if(isset($_REQUEST['detalle'])){
         <div id="ejercicios">
         <form name="ejercicio21" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <table class="formulario">
+                    <p>
                     <?php
-                    
+                    echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff'];
                     ?>
+                    </p>
                     <tr>
                         <td colspan="2"><input type="submit" id="salir" value="Salir" name="salir"></td>
                     </tr>

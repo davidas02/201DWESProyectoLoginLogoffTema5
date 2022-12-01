@@ -35,9 +35,10 @@ if (isset($_REQUEST['volver'])) {
             </form>
 
             <?php
+            session_start();
             //Muestra del contenido de la variable $_SESSION con foreach()
             echo '<h2>Mostrar $_SESSION con foreach()</h2>';
-            if (isset($_SESSION)) {
+            
                 echo "<table><tr><th class='cajaizquierda'>Clave</th><th class='cajaderecha'>Valor</th></tr>";
                 foreach ($_SESSION as $clave => $valor) {
                     echo "<tr>";
@@ -55,9 +56,7 @@ if (isset($_REQUEST['volver'])) {
                     echo "</tr>";
                 }
                 echo "</table>";
-            } else {
-                echo '$_SESSION esta vacia';
-            }
+            
             echo "</br>";
 
             //Muestra del contenido de la variable $_COOKIE con foreach()
