@@ -20,12 +20,12 @@ try {
         //Crear un objeto PDO pasándole las constantes definidas como parametros.
         $miDB = new PDO(DSN, USER, PASS);
         $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 8,4, obligatorio: 1);
-        $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8,4,2, obligatorio: 1);
+        $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8,4, obligatorio: 1);
         foreach ($aErrores as $claveError => $mensajeError) {
                 if ($mensajeError != null) {
                     $entradaOk = false;
                 }
-            };
+            }
         $queryConsultaPorCodigo = $miDB->prepare($buscaUsuarioPorCodigo);
         $queryConsultaPorCodigo->bindParam(':codUsuario', $_REQUEST['usuario']);
         $queryConsultaPorCodigo->execute();
@@ -33,7 +33,10 @@ try {
         //Comprobación de contraseña correcta
         if (!$oUsuario || $oUsuario->T01_Password != hash('sha256', ($_REQUEST['usuario'] . $_REQUEST['password']))) {
             $entradaOk = false;
-        } //   
+        } else {
+            //Actualizacion posterior
+        }
+//   
     } else {
         $entradaOk = false;
     }
