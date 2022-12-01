@@ -1,7 +1,12 @@
 <?php
+session_start();
 if (isset($_REQUEST['volver'])) {
     header("Location: programa.php");
     exit();
+}
+if($_SESSION['usuarioDAW201AppLoginLogoff']==null){
+    header('Location: login.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -35,7 +40,7 @@ if (isset($_REQUEST['volver'])) {
             </form>
 
             <?php
-            session_start();
+            
             //Muestra del contenido de la variable $_SESSION con foreach()
             echo '<h2>Mostrar $_SESSION con foreach()</h2>';
             
@@ -43,7 +48,7 @@ if (isset($_REQUEST['volver'])) {
                 foreach ($_SESSION as $clave => $valor) {
                     echo "<tr>";
                     echo "<td><strong>$clave</strong></td>";
-                    if (is_array($valor)) {
+                    if (is_object($valor)) {
                         echo '<td><table><th>Clave</th><th>valor</th>';
                         foreach ($valor as $c => $v) {
                             echo "<tr><th>$c</th>";

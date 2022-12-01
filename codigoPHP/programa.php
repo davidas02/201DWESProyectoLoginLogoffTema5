@@ -1,14 +1,20 @@
 <?php
+session_start();
 if (isset($_REQUEST['salir'])) {
-    header('Location: login.php');
+    $_SESSION['usuarioDAW201AppLoginLogoff']=null;
     session_destroy();
+    header('Location: login.php');
+    exit;
+}
+if($_SESSION['usuarioDAW201AppLoginLogoff']==null){
+    header('Location: login.php');
     exit;
 }
 if(isset($_REQUEST['detalle'])){
     header('Location: detalle.php');
     exit;
 }
-session_start();
+
 ?>
     <!DOCTYPE html>
     <html>
@@ -35,7 +41,17 @@ session_start();
                 <table class="formulario">
                     <p>
                     <?php
-                    echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff'];
+                    echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                    ?>
+                    </p>
+                    <p>
+                    <?php
+                    echo"Ultimo inicio de sesión: ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_FechaHoraUltimaConexion;
+                    ?>
+                    </p>
+                    <p>
+                    <?php
+                    echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
                     ?>
                     </p>
                     <tr>

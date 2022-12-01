@@ -1,76 +1,67 @@
 <?php
 require_once '../core/221024libreriaValidacionFormularios.php';
-require_once '../conf/confDBPDODesarrollo.php';
-define("MAX_TAMANYO", 8); //Tamaño maximo de las entradas alfabetica y password
-define("MIN_TAMANYO", 4); //Tamaño minimo de las entradas alfabetica y password
-define("OBLIGATORIO", 1); //Obligatoriedad
+require_once '../conf/confDBPDOCasa.php';
 
+$entradaOk = true;
+//Array de respuestas para guardar las respuestas del formulario.
 $aErrores = [
-    'usuario' => "",
-    'password' => "",
-    'conexion'=>""
+    'usuario' => null,
+    'password' => null
 ];
-$entradaOK = true;
-$buscarUsuario = <<<SQL
-              Select * from T01_Usuarios where T01_CodUsuario=':codUsuario1';
-        SQL;
-$actualizacion = <<<SQL
-               update T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() where T01_CodUsuario=':codUsuario2'; 
-            SQL;
-$ultimaCon = null;
-$conexionesAnteriores = null;
-$password = null;
-if (isset($_REQUEST['iniciarSesion'])) {
-    $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 8, 4, 1);
-    $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8, 4, 2, 1);
-    if ($aErrores['usuario'] == null) {
-        try {
-            $miDB = new PDO(DSN, USER, PASS);
-            $resultadoSQL1 = $miDB->prepare($buscarUsuario);
-            $resultadoSQL1->bindParam(':codUsuario1', $_REQUEST['usuario']);
-            $resultadoSQL1->execute();
-            $oUsuario = $statement1->fetchObject();
-            if (!$oUsuario) {
-                $aErrores['conexion']="Error";
-            } else {
-                $ultimaCon = $oUsuario->T01_FechaHoraUltimaConexion;
-                $conxionesAnteriores = $oUsuario->T01_NumConexiones;
-                $password = hash('sha256', ($_REQUEST['usuario'] . $_REQUEST['password']));
-                if ($_REQUEST['usuario']!=$oUsuario->T01_Cod_Usuario && $password!=$oUsuario->T01_Password) {
-                    $aErrores['conexion']="Error";
-                }
-            }
-        } catch (PDOException $PDOexc) {
-            echo $PDOexc->getMessage();
-        } finally {
-            unset($miDB);
-        }
-        foreach ($aErrores as $key => $value) {
-            if ($value != null) {
-                $entradaOK = false;
-            }
-        }
-    }
-} else {
-    $entradaOK = false;
-}
-if ($entradaOK) {
-    session_start();
-    $_SESSION['usuarioDAW201AppLoginLogoff'] = $_REQUEST['usuario'];
-    try {
-        $miDB = new PDO(DSN, USER, PASS);
-        $actualizar = $miDB->prepare($actualizacion);
-        $actualizar->bindParam('codUsuario2', $_REQUEST['usuario']);
-        $actualizar->execute();
-    } catch (PDOException $exc) {
-        echo $exc->getMessage();
-    } finally {
-        unset($miDB);
-    }
+$buscaUsuarioPorCodigo = <<< sq2
+    select * from T01_Usuario where T01_CodUsuario=:codUsuario;
+sq2;
+$actualizacionConexiones = <<< sq3
+    update T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() where T01_CodUsuario=:codUsuario;
+sq3;
+//Comprobamos si ha pulsado el botón de Iniciar Sesion
+try {
     if (isset($_REQUEST['iniciarSesion'])) {
-        header('Location: programa.php');
-        exit;
+        //Crear un objeto PDO pasándole las constantes definidas como parametros.
+        $miDB = new PDO(DSN, USER, PASS);
+        $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 8,4, obligatorio: 1);
+        $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8,4, obligatorio: 1);
+        $queryConsultaPorCodigo = $miDB->prepare($buscaUsuarioPorCodigo);
+        $queryConsultaPorCodigo->bindParam(':codUsuario', $_REQUEST['usuario']);
+        $queryConsultaPorCodigo->execute();
+        $oUsuario = $queryConsultaPorCodigo->fetchObject();
+        //Comprobación de contraseña correcta
+        if (!$oUsuario || $oUsuario->T01_Password != hash('sha256', ($_REQUEST['usuario'] . $_REQUEST['password']))) {
+            $entradaOk = false;
+            foreach ($aErrores as $claveError => $mensajeError) {
+                if ($mensajeError != null) {
+                    $entradaOk = false;
+                }
+            };
+        } else {
+            //Actualizacion posterior
+        }
+//   
+    } else {
+        $entradaOk = false;
     }
+} catch (PDOException $excepcion) {
+    echo 'Error: ' . $excepcion->getMessage() . "<br>";
+    echo 'Código de error: ' . $excepcion->getCode() . "<br>";
+} finally {
+    unset($miDB);
+}
+if ($entradaOk) {
+    
+    try {
+       $miDB=new PDO(DSN,USER,PASS);
+       $queryActualizacion=$miDB->prepare($actualizacionConexiones);
+       $queryActualizacion->bindParam(":codUsuario",$oUsuario->T01_CodUsuario);
+       $queryActualizacion->execute();
+    } catch (PDO $exc) {
+        echo $exc->getTraceAsString();
+    } finally {
+        unset($miDB);  
+    }
+session_start();
+    $_SESSION['usuarioDAW201AppLoginLogoff'] = $oUsuario;
+    header('Location: programa.php');
+    die();
 } else {
     ?>
     <!DOCTYPE html>
