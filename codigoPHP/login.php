@@ -1,8 +1,8 @@
 <?php
-if (isset($_REQUEST['iniciarSesion'])) {
+if (isset($_REQUEST['iniciarSesion'])&&$entradaOK) {
     header('Location: programa.php');
     exit;
-}            require_once '../core/221024libreriaValidacionFormularios.php';
+}           require_once '../core/221024libreriaValidacionFormularios.php';
             require_once '../conf/confDBPDOCasa.php';
             $entradaOK = true;
             define("MAX_TAMANYO", 8);
@@ -12,6 +12,7 @@ if (isset($_REQUEST['iniciarSesion'])) {
                 'usuario' => "",
                 'password' => ""
             ];
+            //Comentario
             $aErrores = [
                 'usuario' => "",
                 'password' => ""
