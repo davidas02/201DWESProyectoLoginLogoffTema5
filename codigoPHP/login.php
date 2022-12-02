@@ -1,6 +1,6 @@
 <?php
 require_once '../core/221024libreriaValidacionFormularios.php';
-require_once '../conf/confDBPDOCasa.php';
+require_once '../conf/confDBPDODesarrollo.php';
 
 $entradaOk = true;
 //Array de respuestas para guardar las respuestas del formulario.
@@ -20,7 +20,7 @@ try {
         //Crear un objeto PDO pasándole las constantes definidas como parametros.
         $miDB = new PDO(DSN, USER, PASS);
         $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 8,4, obligatorio: 1);
-        $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8,4, obligatorio: 1);
+        $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8,4,1, obligatorio: 1);
         foreach ($aErrores as $claveError => $mensajeError) {
                 if ($mensajeError != null) {
                     $entradaOk = false;
