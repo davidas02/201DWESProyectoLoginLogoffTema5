@@ -1,12 +1,20 @@
 <?php
-if (isset($_REQUEST['volver'])) {
-    header('Location: ../../201DWESProyectoDWES/indexProyectoDWES.php');
+session_start();
+if (isset($_REQUEST['salir'])) {
+    $_SESSION['usuarioDAW201AppLoginLogoff']=null;
+    session_destroy();
+    header('Location: login.php');
     exit;
 }
-if(isset($_REQUEST['iniciarSesion'])){
-    header('Location: programa.php');
+if($_SESSION['usuarioDAW201AppLoginLogoff']==null){
+    header('Location: login.php');
     exit;
 }
+if(isset($_REQUEST['detalle'])){
+    header('Location: detalle.php');
+    exit;
+}
+
 ?>
     <!DOCTYPE html>
     <html>
@@ -23,28 +31,42 @@ if(isset($_REQUEST['iniciarSesion'])){
         </head>
     <body>
         <header>
-            <h1>Tema 5 DESARROLLO DE APLICACIONES WEB UTILIZANDO CÓDIGO EMBEBIDO</h1>
+            <h1>Tema 5 Proyecto LoginLogoff</h1>
             <div id="nav">
-                <h2>1. Desarrollo de un control de acceso con identificación del usuario basado en la función header().</h2>
+                <h2>Programa</h2>
             </div>
         </header>
         <div id="ejercicios">
         <form name="ejercicio21" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <table class="formulario">
-                    
+                    <p>
+                    <?php
+                    echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                    ?>
+                    </p>
+                    <p>
+                    <?php
+                    echo"Ultimo inicio de sesión: ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_FechaHoraUltimaConexion;
+                    ?>
+                    </p>
+                    <p>
+                    <?php
+                    echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
+                    ?>
+                    </p>
                     <tr>
-                        <td colspan="2"><input type="submit" id="volver" value="Volver" name="volver"></td>
+                        <td colspan="2"><input type="submit" id="salir" value="Salir" name="salir"></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><input type="submit" id="detalle" value="detalle" name="Detalle"></td>
+                        <td colspan="2"><input type="submit" id="detalle" value="Detalle" name="detalle"></td>
                     </tr>
                 </table>
             </form>
         </div>
     <footer> 
         <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
-        <a href="../indexProyectoTema5.php"><img src="../doc/img/home.png" alt="HOME"/></a>
-        <a href="https://www.github.com/davidas02" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
+        <a href="../indexProyectoTema5.php"><img src="../doc/img/home.png" alt="HOME" hidden/></a>
+        <a href="https://www.github.com/davidas02/201DWESProyectoLoginLogoffTema5" target="_blank"><img src="../doc/img/git.png" alt="github David Aparicio"/></a>
         <p>2022-2023 David Aparicio Sir &COPY; Todos los derechos reservados</p>
     </footer>
 </body>
