@@ -1,4 +1,9 @@
 <?php
+/**
+ *  @author David Aparicio Sir
+ *  @version V1.0
+ *  @since 05/12/2022
+ */
 session_start();
 if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
     header('Location: login.php');
@@ -48,7 +53,7 @@ if(isset($_REQUEST['detalle'])){
                     <p>
                     <?php
                     if($_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones>0){
-                    echo"Ultimo inicio de sesión: ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_FechaHoraUltimaConexion;
+                    echo"Ultimo inicio de sesión: ".$_SESSION['UltimaConexionDAW201AppLoginLogoff'];
                     ?>
                     </p>
                     <p>
