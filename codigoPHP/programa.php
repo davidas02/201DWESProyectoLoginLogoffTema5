@@ -1,15 +1,21 @@
 <?php
+/**
+ *  @author David Aparicio Sir
+ *  @version V1.0
+ *  @since 05/12/2022
+ */
 session_start();
+if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
+    header('Location: login.php');
+    exit;
+}
 if (isset($_REQUEST['salir'])) {
     $_SESSION['usuarioDAW201AppLoginLogoff']=null;
     session_destroy();
     header('Location: login.php');
     exit;
 }
-if($_SESSION['usuarioDAW201AppLoginLogoff']==null){
-    header('Location: login.php');
-    exit;
-}
+
 if(isset($_REQUEST['detalle'])){
     header('Location: detalle.php');
     exit;
@@ -46,13 +52,21 @@ if(isset($_REQUEST['detalle'])){
                     </p>
                     <p>
                     <?php
-                    echo"Ultimo inicio de sesión: ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_FechaHoraUltimaConexion;
+                    if($_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones>0){
+                    echo"Ultimo inicio de sesión: ".$_SESSION['UltimaConexionDAW201AppLoginLogoff'];
                     ?>
                     </p>
                     <p>
                     <?php
                     echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
+                    }else{
                     ?>
+                    </p>
+                    <p>
+                        <?php 
+                        echo 'Es la primera vez que te conectas';
+                    }
+                        ?>
                     </p>
                     <tr>
                         <td colspan="2"><input type="submit" id="salir" value="Salir" name="salir"></td>

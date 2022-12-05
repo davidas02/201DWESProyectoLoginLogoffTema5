@@ -1,12 +1,17 @@
 <?php
+/**
+ *  @author David Aparicio Sir
+ *  @version V1.0
+ *  @since 05/12/2022
+ */
 session_start();
+if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
+    header('Location: login.php');
+    exit;
+}
 if (isset($_REQUEST['volver'])) {
     header("Location: programa.php");
     exit();
-}
-if($_SESSION['usuarioDAW201AppLoginLogoff']==null){
-    header('Location: login.php');
-    exit;
 }
 ?>
 <!DOCTYPE html>
