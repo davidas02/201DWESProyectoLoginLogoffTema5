@@ -124,8 +124,9 @@ if (isset($_REQUEST['volver'])) {
             echo '<h2>Mostrar $_ENV con foreach()</h2>';
             echo '<table><tr><th>Clave</th><th>Valor</th></th>';
             foreach ($_ENV as $key => $value) {
-                echo "<td><strong>" . $key . "</strong></td>";
-                echo "<td>" . $value . "</td>";
+                
+                echo "<tr><td><strong>" . $key . "</strong></td>";
+                echo "<td>" . $value . "</td></tr>";
             }
             echo '</table>';
             echo "</br>";

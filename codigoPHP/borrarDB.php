@@ -21,8 +21,7 @@
         $miDB = new PDO(DSN, USER, PASS);
 
         $borrado = $miDB->prepare(<<<SQL
-        drop table if exists T02_Departamento ;
-                drop table if exists T01_Usuario ;
+        drop table if exists Departamento ;
         SQL);
         $borrado->execute(); //Ejecuto la consulta
         if ($borrado) {
