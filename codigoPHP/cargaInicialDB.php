@@ -27,7 +27,9 @@
             ("MAR","Departamento de Marketing",null,13657,FROM_UNIXTIME('1668167592')),
             ("IDE","Departamento de Innovacion y Desarrollo",null,-2350,FROM_UNIXTIME('1668167592')),
             ("CON","Departamento de Contabilidad",null,44962,FROM_UNIXTIME('1668167592'));
-        insert into T01_Usuario(T01_CodUsuario,T01_Password,T01_DescUsuario,T01_FechaHoraUltimaConexion,T01_NumConexiones,T01_Perfil) values
+        SQL);
+        $insercion1=$miDB->prepare(<<<SQL
+            insert into T01_Usuario(T01_CodUsuario,T01_Password,T01_DescUsuario,T01_FechaHoraUltimaConexion,T01_NumConexiones,T01_Perfil) values
             ('admin',sha2(concat('admin','paso'),256),'Administrador',null,0,'administrador'),
             ('heraclio',sha2(concat('heraclio','paso'),256),'Heraclio',null,0,'usuario'),
             ('amor',sha2(concat('amor','paso'),256),'Amor',null,0,'usuario'),
@@ -39,24 +41,44 @@
             ('luis',sha2(concat('luis','paso'),256),'Luis',null,0,'usuario'),
             ('manuel',sha2(concat('manuel','paso'),256),'Manuel',null,0,'usuario'),
             ('david',sha2(concat('david','paso'),256),'David',null,0,'usuario');
-        SQL);
-        $insercion2->execute();
+            SQL);
+        /*$insercion2->execute();
         if($insercion2){
-            echo"<h3>Insercion 2 ejecutada con exito</h3>";
-            $resultadoUsuarios = $miDB->query("select * from T02_Departamento");
+            echo"<h3>Insercion ejecutada con exito</h3>";
+            $resultadoDepartamentos = $miDB->query("select * from T02_Departamento");
            print '<table>';
             print '<tr><th>codDepartamento</th><th>descDepartamento</th><th>fechaBaja</th><th>volumenNegocio</th><th>fechaAlta</th></tr>';
+            $oDepartamento=$resultadoDepartamentos->fetch_object();
+            while ($oDepartamento!=null) {
+                print"<tr>";
+                echo "<td>$oDepartamento->T02_CodDepartamento</td>";
+                echo "<td>$oDepartamento->T02_DescDepartamento</td>";
+                echo "<td>$oDepartamento->T02_FechaBaja</td>";
+                echo "<td>$oDepartamento->T02_VolumenNegocio</td>";
+                echo "<td>$oDepartamento->T02_FechaAlta</td>";
+                echo "<td>$oDepartamento->T02_Perfil</td>";
+                print"</tr>";
+                $oDepartamento=$resultadoDepartamento->fetch_object();
+            }
+            print '</table>';
+        }*/
+        $insercion1->execute();
+        if($insercion2){
+            echo"<h3>Insercion ejecutada con exito</h3>";
+            $resultadoUsuarios = $miDB->query("select * from T01_Usuario");
+           print '<table>';
+            print '<tr><th>codUsuario</th><th>descUsuario</th><th>FechaHoraUltimaConexion</th><th>NumConexiones</th><th>Perfil</th></tr>';
             $oUsuario=$resultadoUsuarios->fetch_object();
             while ($oUsuario!=null) {
                 print"<tr>";
                 echo "<td>$oUsuario->T01_CodUsuario</td>";
-                echo "<td>$oDepartamento->T01_Password</td>";
-                echo "<td>$oDepartamento->T01_DescUsuario</td>";
-                echo "<td>$oDepartamento->T01_FechaHoraUltimaConexion</td>";
-                echo "<td>$oDepartamento->T01_NumConexiones</td>";
-                echo "<td>$oDepartamento->T01_Perfil</td>";
+                echo "<td>$oUsuario->T01_Password</td>";
+                echo "<td>$oUsuario->T01_DescUsuario</td>";
+                echo "<td>$oUsuario->T01_FechaHoraUltimaConexion</td>";
+                echo "<td>$oUsuario->T01_NumConexiones</td>";
+                echo "<td>$oUsuario->T01_Perfil</td>";
                 print"</tr>";
-                $oDepartamento=$resultadoDepartamentos->fetch_object();
+                $oUsuario=$resultadoUsuarios->fetch_object();
             }
             print '</table>';
         }
