@@ -1,12 +1,12 @@
 <?php
 session_start();
+if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
+    header('Location: login.php');
+    exit;
+}
 if (isset($_REQUEST['volver'])) {
     header("Location: programa.php");
     exit();
-}
-if($_SESSION['usuarioDAW201AppLoginLogoff']==null){
-    header('Location: login.php');
-    exit;
 }
 ?>
 <!DOCTYPE html>

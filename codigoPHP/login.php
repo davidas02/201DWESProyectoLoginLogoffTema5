@@ -1,6 +1,6 @@
 <?php
 require_once '../core/221024libreriaValidacionFormularios.php';
-require_once '../conf/confDBPDOExplotacion.php';
+require_once '../conf/confDBPDODesarrollo.php';
 
 $entradaOk = true;
 //Array de respuestas para guardar las respuestas del formulario.
@@ -47,14 +47,13 @@ try {
     unset($miDB);
 }
 if ($entradaOk) {
-    
     try {
        $miDB=new PDO(DSN,USER,PASS);
        $queryActualizacion=$miDB->prepare($actualizacionConexiones);
        $queryActualizacion->bindParam(":codUsuario",$oUsuario->T01_CodUsuario);
        $queryActualizacion->execute();
-    } catch (PDO $exc) {
-        echo $exc->getTraceAsString();
+    } catch (PDOException $exc) {
+        echo $exc->getMessage();
     } finally {
         unset($miDB);  
     }
