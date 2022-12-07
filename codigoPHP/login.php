@@ -5,7 +5,7 @@
  *  @since 07/12/2022
  */
 require_once '../core/221024libreriaValidacionFormularios.php';
-require_once '../conf/confDBPDODesarrollo.php';
+require_once '../conf/confDBPDOExplotacion.php';
 
 $entradaOk = true;
 //Array de respuestas para guardar las respuestas del formulario.
