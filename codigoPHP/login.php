@@ -113,6 +113,14 @@ if ($entradaOk) {
                             <td><input type="password" name="password" class="password" /></td>
                         </tr>
                         <tr>
+                            <td>
+                                <select id="idioma" name="idioma">
+                                    <option value="es"><img src="../doc/img/es.png" alt="Español"/></option>
+                                    <option value="pt"><img src="../doc/img/pt.png" alt="Portugués"/></option>
+                                    <option value="eus"><img src="../doc/img/eus.png" alt="Euskera"/></option>
+                                    <option value="gb"><img src="../doc/img/gb.png" alt="Inglés"/></option>
+                                </select>
+                            </td>
                             <td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
                         </tr>
                     </table>
