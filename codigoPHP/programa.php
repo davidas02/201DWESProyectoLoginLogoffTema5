@@ -2,20 +2,24 @@
 /**
  *  @author David Aparicio Sir
  *  @version V1.0
- *  @since 05/12/2022
+ *  @since 07/12/2022
  */
+//iniciamos la sesión
 session_start();
+//Comprobamos que el usuario se ha logeado si no lo redirijo a la ventana de login
 if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
     header('Location: login.php');
     exit;
 }
+//Comprobamos que hemos pulsado en salir borramos todo lo que hay en la sesion y la destruimos
 if (isset($_REQUEST['salir'])) {
     $_SESSION['usuarioDAW201AppLoginLogoff']=null;
+    $_SESSION['FechaHoraUltimaConexionAnterior']=null;
     session_destroy();
     header('Location: login.php');
     exit;
 }
-
+//Comprobamos que hemos pulsado en detalle y dirigimos a detalle.php
 if(isset($_REQUEST['detalle'])){
     header('Location: detalle.php');
     exit;
@@ -47,13 +51,15 @@ if(isset($_REQUEST['detalle'])){
                 <table class="formulario">
                     <p>
                     <?php
+                    //Damos la bienvenida al usuario
                     echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
                     ?>
                     </p>
                     <p>
                     <?php
-                    if($_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones>0){
-                    echo"Ultimo inicio de sesión: ".$_SESSION['UltimaConexionDAW201AppLoginLogoff'];
+                    //comprobamos el numero de conexiones si es mayor a 1 tambien mostramos la fecha y hora de la ultima conexion
+                    if($_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones>1){
+                    echo"Ultimo inicio de sesión: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
                     ?>
                     </p>
                     <p>
