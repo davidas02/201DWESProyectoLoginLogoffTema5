@@ -52,7 +52,21 @@ if(isset($_REQUEST['detalle'])){
                     <p>
                     <?php
                     //Damos la bienvenida al usuario
-                    echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                    switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        case "pt":
+                            echo"Bem-vido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        case "gb":
+                            echo"Welcome".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        default:
+                            echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                    }
+                        
                     ?>
                     </p>
                     <p>

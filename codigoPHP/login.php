@@ -74,6 +74,8 @@ if ($entradaOk) {
     } finally {
         unset($miDB);
     }
+    $fechaActual=new DateTime('now');
+    setcookie('idioma',$_REQUEST['idioma'],$fechaActual->add(new DateInterval("PT30M")));
     //Introducimos el usuario en la sesion
     $_SESSION['usuarioDAW201AppLoginLogoff'] = $oUsuario;
 
@@ -111,6 +113,16 @@ if ($entradaOk) {
                         <tr>
                             <td><label for="password">Password:</label></td>
                             <td><input type="password" name="password" class="password" /></td>
+                        </tr>
+                        <tr>
+                            <td>Idioma</td>
+                            <td>
+                                <select name="idioma" class="idioma">
+                                    <option value="es">Español</option>
+                                    <option value="pt">Portugués</option>
+                                    <option value="gb">Inglés</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
