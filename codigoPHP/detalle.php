@@ -4,11 +4,14 @@
  *  @version V1.0
  *  @since 05/12/2022
  */
+//Inicioamos la sesón
 session_start();
+//comprobamos que el usuario está logeado si no lo redirigimos al login
 if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
     header('Location: login.php');
     exit;
 }
+//Comprobamos que se ha pulsado a volver si es correcto redirigimos la pagina al programa
 if (isset($_REQUEST['volver'])) {
     header("Location: programa.php");
     exit();
