@@ -60,7 +60,7 @@ if(isset($_REQUEST['detalle'])){
                             echo"Bem-vindo ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
                             break;
                         case "gb":
-                            echo"Welcome".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            echo"Welcome ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
                             break;
                         default:
                             echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
@@ -97,7 +97,7 @@ if(isset($_REQUEST['detalle'])){
                             echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
                             break;
                         case "pt":
-                            echo"você se conectou ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." vezes";
+                            echo"Você se conectou ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." vezes";
                             break;
                         case "gb":
                             echo"You have been connected ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." times before";
@@ -111,7 +111,21 @@ if(isset($_REQUEST['detalle'])){
                     </p>
                     <p>
                         <?php 
-                        echo 'Es la primera vez que te conectas';
+                        
+                        switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo 'Es la primera vez que te conectas';
+                            break;
+                        case "pt":
+                            echo"É a primeira vez que você se conecta";
+                            break;
+                        case "gb":
+                            echo"It's the first time you connect";
+                            break;
+                        default:
+                            echo 'Es la primera vez que te conectas';
+                            break;
+                    }
                     }
                         ?>
                     </p>
