@@ -14,6 +14,7 @@
             <h2>Enunciado</h2>
         </div>
     </header>
+    <div id="ejercicios">
     <?php
     include_once '../conf/confDBPDOExplotacion.php';
     try {
@@ -31,17 +32,18 @@
         $insercion->execute();
         if ($insercion) {
             $resultadoDepartamentos = $miDB->prepare("Select * from T02_Departamento");
+            $resultadoDepartamentos->execute();
             $oDepartamento = $resultadoDepartamentos->fetchObject();
             if (is_object($oDepartamento)) {
                 print '<table>';
                 print '<tr><th>codDepartamento</th><th>descDepartamento</th><th>fechaBaja</th><th>volumenNegocio</th><th>fechaAlta</th></tr>';
                 while ($oDepartamento != null) {
                     print"<tr>";
-                    echo "<td>$oDepartamento->codDepartamento</td>";
-                    echo "<td>$oDepartamento->descDepartamento</td>";
-                    echo "<td>$oDepartamento->fechaBaja</td>";
-                    echo "<td>$oDepartamento->volumenNegocio</td>";
-                    echo "<td>$oDepartamento->fechaAlta</td>";
+                    echo "<td>$oDepartamento->T02_codDepartamento</td>";
+                    echo "<td>$oDepartamento->T02_descDepartamento</td>";
+                    echo "<td>$oDepartamento->T02_fechaBaja</td>";
+                    echo "<td>$oDepartamento->T02_volumenNegocio</td>";
+                    echo "<td>$oDepartamento->T02_fechaAlta</td>";
                     $oDepartamento = $resultadoDepartamentos->fetchObject();
                 }
                 print '</table>';
@@ -73,13 +75,13 @@
             while ($oUsuario != null) {
                 print"<tr>";
                 echo "<td>$oUsuario->T01_CodUsuario</td>";
-                echo "<td>$oDepartamento->T01_Password</td>";
-                echo "<td>$oDepartamento->T01_DescUsuario</td>";
-                echo "<td>$oDepartamento->T01_FechaHoraUltimaConexion</td>";
-                echo "<td>$oDepartamento->T01_NumConexiones</td>";
-                echo "<td>$oDepartamento->T01_Perfil</td>";
+                echo "<td>$oUsuario->T01_Password</td>";
+                echo "<td>$oUsuario->T01_DescUsuario</td>";
+                echo "<td>$oUsuario->T01_FechaHoraUltimaConexion</td>";
+                echo "<td>$oUsuario->T01_NumConexiones</td>";
+                echo "<td>$oUsuario->T01_Perfil</td>";
                 print"</tr>";
-                $oDepartamento = $resultadoDepartamentos->fetchObject();
+                $oUsuario = $resultadoUsuarios->fetchObject();
             }
             print '</table>';
         }
@@ -96,6 +98,7 @@
         unset($mydb);
     }
     ?>
+    </div>
     <footer> 
         <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
         <a href="../indexProyectoTema4.php"><img src="../doc/img/home.png" alt="HOME"/></a>
