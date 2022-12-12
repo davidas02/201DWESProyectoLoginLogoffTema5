@@ -51,20 +51,61 @@ if(isset($_REQUEST['detalle'])){
                 <table class="formulario">
                     <p>
                     <?php
-                    //Damos la bienvenida al usuario
-                    echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                    //Damos la bienvenida al usuario en diferentes idiomas dependiendo de la cookie idioma
+                    switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        case "pt":
+                            echo"Bem-vindo ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        case "gb":
+                            echo"Welcome".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        default:
+                            echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                    }
+                        
                     ?>
                     </p>
                     <p>
                     <?php
                     //comprobamos el numero de conexiones si es mayor a 1 tambien mostramos la fecha y hora de la ultima conexion
                     if($_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones>1){
-                    echo"Ultimo inicio de sesión: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                    switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo"Ultimo inicio de sesión: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                        case "pt":
+                            echo"Último Login: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                        case "gb":
+                            echo"Last Login: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                        default:
+                            echo"Ultimo inicio de sesión: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                    }
                     ?>
                     </p>
                     <p>
                     <?php
-                    echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
+                    //Mostramos el numero de conexiones
+                    switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
+                            break;
+                        case "pt":
+                            echo"você se conectou ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." vezes";
+                            break;
+                        case "gb":
+                            echo"You have been connected ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." times before";
+                            break;
+                        default:
+                            echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
+                            break;
+                    }
                     }else{
                     ?>
                     </p>

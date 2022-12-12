@@ -1,11 +1,11 @@
 <?php
 /**
  *  @author David Aparicio Sir
- *  @version V1.0
- *  @since 07/12/2022
+ *  @version V1.1
+ *  @since 11/12/2022
  */
 require_once '../core/221024libreriaValidacionFormularios.php';
-require_once '../conf/confDBPDOExplotacion.php';
+require_once '../conf/confDBPDODesarrollo.php';
 
 $entradaOk = true;
 //Array de respuestas para guardar las respuestas del formulario.
@@ -74,6 +74,8 @@ if ($entradaOk) {
     } finally {
         unset($miDB);
     }
+    //Establecemos una nueva cookie para el idioma y utlizaremos el metodo time al cual le sumaremos 1800 segundos(media hora)
+    setcookie('idioma',$_REQUEST['idioma'], time()+1800);
     //Introducimos el usuario en la sesion
     $_SESSION['usuarioDAW201AppLoginLogoff'] = $oUsuario;
 
@@ -115,10 +117,9 @@ if ($entradaOk) {
                         <tr>
                             <td>
                                 <select id="idioma" name="idioma">
-                                    <option value="es"><img src="../doc/img/es.png" alt="Español"/></option>
-                                    <option value="pt"><img src="../doc/img/pt.png" alt="Portugués"/></option>
-                                    <option value="eus"><img src="../doc/img/eus.png" alt="Euskera"/></option>
-                                    <option value="gb"><img src="../doc/img/gb.png" alt="Inglés"/></option>
+                                    <option value="es"><img src="../doc/img/es.png" alt="Español"/>Español</option>
+                                    <option value="pt"><img src="../doc/img/pt.png" alt="Portugués"/>Portugués</option>
+                                    <option value="gb"><img src="../doc/img/gb.png" alt="Inglés"/>Inglés</option>
                                 </select>
                             </td>
                             <td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
