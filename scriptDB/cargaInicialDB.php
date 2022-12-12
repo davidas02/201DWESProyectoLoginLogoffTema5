@@ -19,35 +19,58 @@
     try {
         //Establecimiento de la conexión 
         $miDB = new PDO(DSN, USER, PASS);
-       
-        $insercion2=$miDB->prepare(<<<SQL
+
+        $insercion = $miDB->prepare(<<<SQL
         insert into T02_Departamento values
             ("INF","Departamento de Informatica",null,3500,FROM_UNIXTIME('1668167592')),
             ("VEN","Departamento de Ventas",null,25000,FROM_UNIXTIME('1668167592')),
             ("MAR","Departamento de Marketing",null,13657,FROM_UNIXTIME('1668167592')),
             ("IDE","Departamento de Innovacion y Desarrollo",null,-2350,FROM_UNIXTIME('1668167592')),
             ("CON","Departamento de Contabilidad",null,44962,FROM_UNIXTIME('1668167592'));
+                SQL);
+        $insercion->execute();
+        if($insercion){
+            $buscar=$miDB->prepare("Select * from T02_Departamento");
+            $oDepartamento = $resultadoDepartamentos->fetchObject();
+            if(is_object($oDepartamento)){
+                print '<table>';
+                print '<tr><th>codDepartamento</th><th>descDepartamento</th><th>fechaBaja</th><th>volumenNegocio</th><th>fechaAlta</th></tr>';
+                while ($oDepartamento != null) {
+                    print"<tr>";
+                    echo "<td>$oDepartamento->codDepartamento</td>";
+                    echo "<td>$oDepartamento->descDepartamento</td>";
+                    echo "<td>$oDepartamento->fechaBaja</td>";
+                    echo "<td>$oDepartamento->volumenNegocio</td>";
+                    echo "<td>$oDepartamento->fechaAlta</td>";
+                    $oDepartamento = $resultadoDepartamentos->fetchObject();
+                }
+                print '</table>';
+            } else {
+            }
+        }
+        $insercion2 = $miDB->prepare(<<<SQL
         insert into T01_Usuario(T01_CodUsuario,T01_Password,T01_DescUsuario,T01_FechaHoraUltimaConexion,T01_NumConexiones,T01_Perfil) values
-            ('admin',sha2(concat('admin','paso'),256),'Administrador',null,0,'administrador'),
-            ('heraclio',sha2(concat('heraclio','paso'),256),'Heraclio',null,0,'usuario'),
-            ('amor',sha2(concat('amor','paso'),256),'Amor',null,0,'usuario'),
-            ('antonio',sha2(concat('antonio','paso'),256),'Antonio',null,0,'usuario'),
-            ('alberto',sha2(concat('alberto','paso'),256),'Alberto',null,0,'usuario'),
-            ('ricardo',sha2(concat('ricardo','paso'),256),'Ricardo',null,0,'usuario'),
-            ('otalvaro',sha2(concat('otalvaro','paso'),256),'Alejandro',null,0,'usuario'),
-            ('josue',sha2(concat('josue','paso'),256),'Josué',null,0,'usuario'),
-            ('luis',sha2(concat('luis','paso'),256),'Luis',null,0,'usuario'),
-            ('manuel',sha2(concat('manuel','paso'),256),'Manuel',null,0,'usuario'),
-            ('david',sha2(concat('david','paso'),256),'David',null,0,'usuario');
-        SQL);
+        ('admin',sha2(concat('admin','paso'),256),'Administrador',null,0,'administrador'),
+        ('heraclio',sha2(concat('heraclio','paso'),256),'Heraclio Profesor',null,0,'usuario'),
+        ('amor',sha2(concat('amor','paso'),256),'Amor Profesora',null,0,'usuario'),
+        ('antonio',sha2(concat('antonio','paso'),256),'Antonio Profesor',null,0,'usuario'),
+        ('alberto',sha2(concat('alberto','paso'),256),'Alberto Profesor',null,0,'usuario'),
+        ('ricardo',sha2(concat('ricardo','paso'),256),'Ricardo Santiago',null,0,'usuario'),
+        ('otalvaro',sha2(concat('otalvaro','paso'),256),'Alejandro Otalvaro',null,0,'usuario'),
+        ('josue',sha2(concat('josue','paso'),256),'Josué Martínez',null,0,'usuario'),
+        ('luis',sha2(concat('luis','paso'),256),'Luis Perez',null,0,'usuario'),
+        ('manuel',sha2(concat('manuel','paso'),256),'Manuel Martín',null,0,'usuario'),
+        ('david',sha2(concat('david','paso'),256),'David Aparicio',null,0,'usuario'); 
+                SQL);
+
         $insercion2->execute();
-        if($insercion2){
-            echo"<h3>Insercion 2 ejecutada con exito</h3>";
+        if ($insercion2) {
+            echo"<h3>Insercion ejecutada con exito</h3>";
             $resultadoUsuarios = $miDB->query("select * from T02_Departamento");
-           print '<table>';
+            print '<table>';
             print '<tr><th>codDepartamento</th><th>descDepartamento</th><th>fechaBaja</th><th>volumenNegocio</th><th>fechaAlta</th></tr>';
-            $oUsuario=$resultadoUsuarios->fetch_object();
-            while ($oUsuario!=null) {
+            $oUsuario = $resultadoUsuarios->fetch_object();
+            while ($oUsuario != null) {
                 print"<tr>";
                 echo "<td>$oUsuario->T01_CodUsuario</td>";
                 echo "<td>$oDepartamento->T01_Password</td>";
@@ -56,7 +79,7 @@
                 echo "<td>$oDepartamento->T01_NumConexiones</td>";
                 echo "<td>$oDepartamento->T01_Perfil</td>";
                 print"</tr>";
-                $oDepartamento=$resultadoDepartamentos->fetch_object();
+                $oDepartamento = $resultadoDepartamentos->fetch_object();
             }
             print '</table>';
         }
