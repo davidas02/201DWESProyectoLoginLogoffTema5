@@ -6,7 +6,9 @@
  */
 require_once '../core/221024libreriaValidacionFormularios.php';
 require_once '../conf/confDBPDODesarrollo.php';
-
+if (isset($_REQUEST['registro'])){
+    header("Location: registro.php");
+}
 $entradaOk = true;
 //Array de respuestas para guardar las respuestas del formulario.
 $aErrores = [
@@ -75,7 +77,11 @@ if ($entradaOk) {
         unset($miDB);
     }
     //Establecemos una nueva cookie para el idioma y utlizaremos el metodo time al cual le sumaremos 1800 segundos(media hora)
+    if (isset($_COOKIE['idioma'])){
     setcookie('idioma',$_REQUEST['idioma'], time()+1800);
+    }else{
+        setcookie('idioma',$_REQUEST['idioma']);
+    }
     //Introducimos el usuario en la sesion
     $_SESSION['usuarioDAW201AppLoginLogoff'] = $oUsuario;
 
@@ -115,14 +121,18 @@ if ($entradaOk) {
                             <td><input type="password" name="password" class="password" /></td>
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="2">
                                 <select id="idioma" name="idioma">
                                     <option value="es"><img src="../doc/img/es.png" alt="Español"/>Español</option>
                                     <option value="pt"><img src="../doc/img/pt.png" alt="Portugués"/>Portugués</option>
                                     <option value="gb"><img src="../doc/img/gb.png" alt="Inglés"/>Inglés</option>
                                 </select>
                             </td>
-                            <td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
+                            
+                        </tr>
+                        <tr><td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td></tr>
+                        <tr>
+                            <td colspan="2"><input type="button" id="registro" name="registro" value="Registrarse"></td>
                         </tr>
                     </table>
                 </form>
