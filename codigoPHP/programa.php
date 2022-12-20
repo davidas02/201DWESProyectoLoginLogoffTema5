@@ -11,6 +11,9 @@ if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
     header('Location: login.php');
     exit;
 }
+if(isset($_REQUEST['modificar'])){
+    header('Location: editarPerfil.php');
+}
 //Comprobamos que hemos pulsado en salir borramos todo lo que hay en la sesion y la destruimos
 if (isset($_REQUEST['salir'])) {
     $_SESSION['usuarioDAW201AppLoginLogoff']=null;
@@ -128,12 +131,16 @@ if(isset($_REQUEST['detalle'])){
                     }
                     }
                         ?>
+                        
                     </p>
                     <tr>
                         <td colspan="2"><input type="submit" id="salir" value="Salir" name="salir"></td>
                     </tr>
                     <tr>
                         <td colspan="2"><input type="submit" id="detalle" value="Detalle" name="detalle"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" id="modificar" value="Modificar Perfil" name="modificar"></td>
                     </tr>
                 </table>
             </form>

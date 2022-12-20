@@ -6,9 +6,7 @@
  */
 require_once '../core/221024libreriaValidacionFormularios.php';
 require_once '../conf/confDBPDODesarrollo.php';
-if (isset($_REQUEST['registro'])){
-    header("Location: registro.php");
-}
+
 $entradaOk = true;
 //Array de respuestas para guardar las respuestas del formulario.
 $aErrores = [
@@ -77,10 +75,8 @@ if ($entradaOk) {
         unset($miDB);
     }
     //Establecemos una nueva cookie para el idioma y utlizaremos el metodo time al cual le sumaremos 1800 segundos(media hora)
-    if (isset($_COOKIE['idioma'])){
-    setcookie('idioma',$_REQUEST['idioma'], time()+1800);
-    }else{
-        setcookie('idioma',$_REQUEST['idioma']);
+    if (!isset($_COOKIE['idioma'])) {
+        setcookie('idioma', $_REQUEST['idioma'], time() + 1800);
     }
     //Introducimos el usuario en la sesion
     $_SESSION['usuarioDAW201AppLoginLogoff'] = $oUsuario;
@@ -88,6 +84,10 @@ if ($entradaOk) {
     header('Location: programa.php');
     die();
 } else {
+    if (isset($_REQUEST['registro'])) {
+        header('Location: registro.php');
+        exit();
+    }
     ?>
     <!DOCTYPE html>
     <html>
@@ -128,11 +128,11 @@ if ($entradaOk) {
                                     <option value="gb"><img src="../doc/img/gb.png" alt="Inglés"/>Inglés</option>
                                 </select>
                             </td>
-                            
+
                         </tr>
                         <tr><td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td></tr>
                         <tr>
-                            <td colspan="2"><input type="button" id="registro" name="registro" value="Registrarse"></td>
+                            <td colspan="2"><input type="submit" id="registro" name="registro" value="Registrarse"></td>
                         </tr>
                     </table>
                 </form>
