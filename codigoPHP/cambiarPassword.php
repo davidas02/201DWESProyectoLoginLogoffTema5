@@ -10,12 +10,15 @@ $entradaOk = true;
 //Array de errores para guardar los errores del formulario.
 $aErrores = [
     'usuario' => null,
-    'password' => null
+    'Apassword' => null,
+    'Npassword' => null,
+    'RNpassword' => null
 ];
 //Array de respuestas para guardar las respuestas del formulario
 $aRespuestas = [
     'usuario' => null,
     'password' => null
+    
 ];
 //Busqueda del usuario introducido
 $buscaUsuarioPorCodigo = <<< sq2
@@ -34,19 +37,22 @@ try {
         $miDB = new PDO(DSN, USER, PASS);
         //Comprobamos que el usuario no haya introducido inyeccion de codigo y los datos están correctos
         $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 8, 4, obligatorio: 1);
-        $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8, 4, 1, obligatorio: 1);
+        $aErrores['Apassword'] = validacionFormularios::validarPassword($_REQUEST['Apassword'], 8, 4, 1, obligatorio: 1);
+        $aErrores['Npassword'] = validacionFormularios::validarPassword($_REQUEST['Npassword'], 8, 4, 1, obligatorio: 1);
+        $aErrores['RNpassword'] = validacionFormularios::validarPassword($_REQUEST['RNpassword'], 8, 4, 1, obligatorio: 1);
         foreach ($aErrores as $claveError => $mensajeError) {
             if ($mensajeError != null) {
                 $entradaOk = false;
             }
         }
+        
         if ($entradaOk) {
             $queryConsultaPorCodigo = $miDB->prepare($buscaUsuarioPorCodigo);
             $queryConsultaPorCodigo->bindParam(':codUsuario', $_REQUEST['usuario']);
             $queryConsultaPorCodigo->execute();
             $oUsuario = $queryConsultaPorCodigo->fetchObject();
             //Comprobación de contraseña correcta
-            if (!$oUsuario) {
+            if ($oUsuario->T01_Password!= hash("sha256",($_REQUEST['usuario'].$_REQUEST['Apassword']))||$_REQUEST['Npassword']!=$_REQUEST['RNpassword']) {
                 $entradaOk = false;
             }
         }
@@ -62,7 +68,7 @@ try {
 }
 if ($entradaOk) {
     $aRespuestas['usuario']=$_REQUEST['usuario'];
-    $aRespuestas['password']=hash('sha256',($_REQUEST['usuario'] . $_REQUEST['password']));
+    $aRespuestas['password']=hash('sha256',($_REQUEST['usuario'] . $_REQUEST['Npassword']));
     //Iniciamos la sesión
     
     try {
@@ -122,8 +128,16 @@ if ($entradaOk) {
                             <td><input type="text" name="usuario" class="usuario" value="<?php echo $_SESSION['usuarioDAW201AppLoginLogoff']->T01_CodUsuario; ?>" readonly="true"/></td>
                         </tr>
                         <tr>
-                            <td><label for="password">Password:</label></td>
-                            <td><input type="password" name="password" class="password" /></td>
+                            <td><label for="password">Password Antigua:</label></td>
+                            <td><input type="password" name="Apassword" class="Apassword" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password">Password Nuevo:</label></td>
+                            <td><input type="password" name="Npassword" class="Npassword" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password">Repite Password Nuevo:</label></td>
+                            <td><input type="password" name="RNpassword" class="RNpassword" /></td>
                         </tr>
                         <tr>
                             <td colspan="2"><input type="submit" id="aceptar" value="Aceptar" name="aceptar"></td>
