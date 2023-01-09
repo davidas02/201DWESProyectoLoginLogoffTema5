@@ -2,6 +2,11 @@
 session_start();
 require_once '../core/221024libreriaValidacionFormularios.php';
 require_once '../conf/confDBPDODesarrollo.php';
+//comprobamos que el usuario está logeado si no lo redirigimos al login
+if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
+    header('Location: login.php');
+    exit;
+}
     if (isset($_REQUEST['volver'])) {
         header('Location: editarPerfil.php');
         exit();
@@ -45,7 +50,9 @@ try {
                 $entradaOk = false;
             }
         }
-        
+        if($_REQUEST['Npassword']!=$_REQUEST['RNpassword']){
+            $entradaOk=false;
+        }
         if ($entradaOk) {
             $queryConsultaPorCodigo = $miDB->prepare($buscaUsuarioPorCodigo);
             $queryConsultaPorCodigo->bindParam(':codUsuario', $_REQUEST['usuario']);
@@ -68,7 +75,7 @@ try {
 }
 if ($entradaOk) {
     $aRespuestas['usuario']=$_REQUEST['usuario'];
-    $aRespuestas['password']=hash('sha256',($_REQUEST['usuario'] . $_REQUEST['Npassword']));
+    $aRespuestas['password']=hash('sha256',($_REQUEST['usuario'].$_REQUEST['Npassword']));
     //Iniciamos la sesión
     
     try {
@@ -125,18 +132,18 @@ if ($entradaOk) {
                     <table class="formulario">
                         <tr>
                             <td><label for="usuario">Usuario:</label></td>
-                            <td><input type="text" name="usuario" class="usuario" value="<?php echo $_SESSION['usuarioDAW201AppLoginLogoff']->T01_CodUsuario; ?>" readonly="true"/></td>
+                            <td><input style="background-color: grey" type="text" name="usuario" class="usuario" value="<?php echo $_SESSION['usuarioDAW201AppLoginLogoff']->T01_CodUsuario; ?>" readonly="true"/></td>
                         </tr>
                         <tr>
-                            <td><label for="password">Password Antigua:</label></td>
+                            <td><label for="Apassword">Password Antigua:</label></td>
                             <td><input type="password" name="Apassword" class="Apassword" /></td>
                         </tr>
                         <tr>
-                            <td><label for="password">Password Nuevo:</label></td>
+                            <td><label for="Npassword">Password Nuevo:</label></td>
                             <td><input type="password" name="Npassword" class="Npassword" /></td>
                         </tr>
                         <tr>
-                            <td><label for="password">Repite Password Nuevo:</label></td>
+                            <td><label for="RNpassword">Repite Password Nuevo:</label></td>
                             <td><input type="password" name="RNpassword" class="RNpassword" /></td>
                         </tr>
                         <tr>

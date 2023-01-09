@@ -6,6 +6,11 @@ require_once '../conf/confDBPDODesarrollo.php';
         header('Location: programa.php');
         exit();
     }
+//comprobamos que el usuario está logeado si no lo redirigimos al login
+if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
+    header('Location: login.php');
+    exit;
+}
     if(isset($_REQUEST['cambiarPassword'])){
         header('Location: cambiarPassword.php');
         exit();
@@ -144,11 +149,11 @@ if ($entradaOk) {
                     <table class="formulario">
                         <tr>
                             <td><label for="usuario">Usuario:</label></td>
-                            <td><input type="text" name="usuario" class="usuario" value="<?php echo $_SESSION['usuarioDAW201AppLoginLogoff']->T01_CodUsuario; ?>" readonly="true"/></td>
+                            <td><input style="background-color: grey" type="text" name="usuario" class="usuario" value="<?php echo $_SESSION['usuarioDAW201AppLoginLogoff']->T01_CodUsuario; ?>" readonly="true" /></td>
                         </tr>
                         <tr>
                             <td><label for="nombre">Nombre:</label></td>
-                            <td><input type="text" name="nombre" class="nombre" /></td>
+                            <td><input type="text" name="nombre" class="nombre" value="<?php echo $_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario; ?>" /></td>
                         </tr>
                         <tr>
                             <td colspan="2"><input type="submit" id="aceptar" value="Aceptar" name="aceptar"></td>
