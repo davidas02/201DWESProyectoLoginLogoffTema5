@@ -59,7 +59,7 @@ try {
             $queryConsultaPorCodigo->execute();
             $oUsuario = $queryConsultaPorCodigo->fetchObject();
             //Comprobación de contraseña correcta
-            if ($oUsuario->T01_Password!= hash("sha256",($_REQUEST['usuario'].$_REQUEST['Apassword']))||$_REQUEST['Npassword']!=$_REQUEST['RNpassword']) {
+            if ($oUsuario->T01_Password!= hash("sha256",($_SESSION['usuarioDAW201AppLoginLogoff']->T01_CodUsuario.$_REQUEST['Apassword']))) {
                 $entradaOk = false;
             }
         }
@@ -75,7 +75,7 @@ try {
 }
 if ($entradaOk) {
     $aRespuestas['usuario']=$_REQUEST['usuario'];
-    $aRespuestas['password']=hash('sha256',($_REQUEST['usuario'].$_REQUEST['Npassword']));
+    $aRespuestas['password']=hash('sha256',($_SESSION['usuarioDAW201AppLoginLogoff']->T01_CodUsuario.$_REQUEST['Npassword']));
     //Iniciamos la sesión
     
     try {
@@ -124,7 +124,7 @@ if ($entradaOk) {
             <header>
                 <h1>Tema 5 Proyecto LoginLogoff</h1>
                 <div id="nav">
-                    <h2>Login</h2>
+                    <h2>Modificar contraseña</h2>
                 </div>
             </header>
             <div id="ejercicios">
@@ -136,15 +136,15 @@ if ($entradaOk) {
                         </tr>
                         <tr>
                             <td><label for="Apassword">Password Antigua:</label></td>
-                            <td><input type="password" name="Apassword" class="Apassword" /></td>
+                            <td><input style="background-color:yellow;" type="password" name="Apassword" class="Apassword" /></td>
                         </tr>
                         <tr>
                             <td><label for="Npassword">Password Nuevo:</label></td>
-                            <td><input type="password" name="Npassword" class="Npassword" /></td>
+                            <td><input style="background-color:yellow;" type="password" name="Npassword" class="Npassword" /></td>
                         </tr>
                         <tr>
                             <td><label for="RNpassword">Repite Password Nuevo:</label></td>
-                            <td><input type="password" name="RNpassword" class="RNpassword" /></td>
+                            <td><input style="background-color:yellow;" type="password" name="RNpassword" class="RNpassword" /></td>
                         </tr>
                         <tr>
                             <td colspan="2"><input type="submit" id="aceptar" value="Aceptar" name="aceptar"></td>

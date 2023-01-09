@@ -121,15 +121,15 @@ if ($entradaOk) {
                     <table class="formulario">
                         <tr>
                             <td><label for="usuario">Usuario:</label></td>
-                            <td><input type="text" name="usuario" class="usuario"/></td>
+                            <td><input style="background-color:yellow;" type="text" name="usuario" class="usuario"/></td>
                         </tr>
                         <tr>
                             <td><label for="password">Password:</label></td>
-                            <td><input type="password" name="password" class="password" /></td>
+                            <td><input style="background-color:yellow;" type="password" name="password" class="password" /></td>
                         </tr>
                         <tr>
                             <td><label for="nombre">Nombre:</label></td>
-                            <td><input type="text" name="nombre" class="nombre" /></td>
+                            <td><input style="background-color:yellow;" type="text" name="nombre" class="nombre" /></td>
                         </tr>
                         <tr>
                             <td colspan="2">

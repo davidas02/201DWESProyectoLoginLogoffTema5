@@ -141,7 +141,7 @@ if ($entradaOk) {
             <header>
                 <h1>Tema 5 Proyecto LoginLogoff</h1>
                 <div id="nav">
-                    <h2>Login</h2>
+                    <h2>Modificar usuario</h2>
                 </div>
             </header>
             <div id="ejercicios">
@@ -163,7 +163,88 @@ if ($entradaOk) {
                             <td><input type="submit" value="Borrar Usuario" name="borrarUsuario" id="borrarUsuario"></td>
                         </tr>
                         </tr>
+                        
                     </table>
+                    <p>
+                        <?php
+                    switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        case "pt":
+                            echo"Bem-vindo ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        case "gb":
+                            echo"Welcome ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                        default:
+                            echo"Bienvenido ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_DescUsuario;
+                            break;
+                    }
+                        
+                    ?>
+                    </p>
+                    <p>
+                    <?php
+                    //comprobamos el numero de conexiones si es mayor a 1 tambien mostramos la fecha y hora de la ultima conexion
+                    if($_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones>1){
+                    switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo"Ultimo inicio de sesión: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                        case "pt":
+                            echo"Último Login: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                        case "gb":
+                            echo"Last Login: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                        default:
+                            echo"Ultimo inicio de sesión: ".$_SESSION['FechaHoraUltimaConexionAnterior'];
+                            break;
+                    }
+                    ?>
+                    </p>
+                    <p>
+                    <?php
+                    //Mostramos el numero de conexiones
+                    switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
+                            break;
+                        case "pt":
+                            echo"Você se conectou ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." vezes";
+                            break;
+                        case "gb":
+                            echo"You have been connected ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." times before";
+                            break;
+                        default:
+                            echo"Te has conectado ".$_SESSION['usuarioDAW201AppLoginLogoff']->T01_NumConexiones." veces";
+                            break;
+                    }
+                    }else{
+                    ?>
+                    </p>
+                    <p>
+                        <?php 
+                        
+                        switch ($_COOKIE['idioma']) {
+                        case "es":
+                            echo 'Es la primera vez que te conectas';
+                            break;
+                        case "pt":
+                            echo"É a primeira vez que você se conecta";
+                            break;
+                        case "gb":
+                            echo"It's the first time you connect";
+                            break;
+                        default:
+                            echo 'Es la primera vez que te conectas';
+                            break;
+                    }
+                    }
+                        ?>
+                        
+                    </p>
                 </form>
             </div>
             
