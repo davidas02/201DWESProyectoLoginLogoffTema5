@@ -1,25 +1,30 @@
 <?php
-/**
- *  @author David Aparicio Sir
- *  @version V1.1
- *  @since 11/12/2022
- */
 require_once '../core/221024libreriaValidacionFormularios.php';
 require_once '../conf/confDBPDODesarrollo.php';
-
+    if (isset($_REQUEST['volver'])) {
+        header('Location: login.php');
+        exit();
+    }
 $entradaOk = true;
-//Array de respuestas para guardar las respuestas del formulario.
+//Array de errores para guardar los errores del formulario.
 $aErrores = [
     'usuario' => null,
-    'password' => null
+    'password' => null,
+    'nombre'=>null
+];
+//Array de respuestas para guardar las respuestas del formulario
+$aRespuestas = [
+    'usuario' => null,
+    'password' => null,
+    'nombre'=>null
 ];
 //Busqueda del usuario introducido
 $buscaUsuarioPorCodigo = <<< sq2
     select * from T01_Usuario where T01_CodUsuario=:codUsuario;
 sq2;
 //actualizacion usuario introducido
-$actualizacionConexiones = <<< sq3
-    update T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() where T01_CodUsuario=:codUsuario;
+$crearUsuario = <<< sq3
+    insert into T01_Usuario values(:usuario,:password,:nombre,now(),1,'usuario',null);
 sq3;
 //Comprobamos si ha pulsado el botón de Iniciar Sesion
 try {
@@ -29,6 +34,7 @@ try {
         //Comprobamos que el usuario no haya introducido inyeccion de codigo y los datos están correctos
         $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 8, 4, obligatorio: 1);
         $aErrores['password'] = validacionFormularios::validarPassword($_REQUEST['password'], 8, 4, 1, obligatorio: 1);
+        $aErrores['nombre']= validacionFormularios::comprobarAlfaNumerico($_REQUEST['nombre'], 255, 2, 1);
         foreach ($aErrores as $claveError => $mensajeError) {
             if ($mensajeError != null) {
                 $entradaOk = false;
@@ -40,11 +46,11 @@ try {
             $queryConsultaPorCodigo->execute();
             $oUsuario = $queryConsultaPorCodigo->fetchObject();
             //Comprobación de contraseña correcta
-            if (!$oUsuario || $oUsuario->T01_Password != hash('sha256', ($_REQUEST['usuario'] . $_REQUEST['password']))) {
+            if (is_object($oUsuario)) {
                 $entradaOk = false;
             }
         }
-//   si no se ha pulsado iniciar sesion le pedimos que muestre el formulario de inicio
+//   si se ha pulsado iniciar sesion le pedimos que muestre el formulario de inicio
     } else {
         $entradaOk = false;
     }
@@ -55,15 +61,19 @@ try {
     unset($miDB);
 }
 if ($entradaOk) {
+    $aRespuestas['usuario']=$_REQUEST['usuario'];
+    $aRespuestas['password']=hash('sha256',($_REQUEST['usuario'] . $_REQUEST['password']));
+    $aRespuestas['nombre']=$_REQUEST['nombre'];
     //Iniciamos la sesión
-    session_start();
-    $_SESSION['FechaHoraUltimaConexionAnterior'] = $oUsuario->T01_FechaHoraUltimaConexion;
+    
     try {
         $miDB = new PDO(DSN, USER, PASS);
         //actualizamos el usuario
-        $queryActualizacion = $miDB->prepare($actualizacionConexiones);
-        $queryActualizacion->bindParam(":codUsuario", $oUsuario->T01_CodUsuario);
-        $queryActualizacion->execute();
+        $queryCrearUsuario = $miDB->prepare($crearUsuario);
+        $queryCrearUsuario->bindParam(":usuario", $aRespuestas['usuario']);
+        $queryCrearUsuario->bindParam(":password", $aRespuestas['password']);
+        $queryCrearUsuario->bindParam(":nombre",$aRespuestas['nombre']);
+        $queryCrearUsuario->execute();
         //Volvemos a buscar el usuario para actualizar el objeto usuario
         $queryConsultaPorCodigo = $miDB->prepare($buscaUsuarioPorCodigo);
         $queryConsultaPorCodigo->bindParam(':codUsuario', $_REQUEST['usuario']);
@@ -79,17 +89,14 @@ if ($entradaOk) {
         setcookie('idioma', $_REQUEST['idioma'], time() + 1800);
     }
     //Introducimos el usuario en la sesion
+    session_start();
     $_SESSION['usuarioDAW201AppLoginLogoff'] = $oUsuario;
-
+    $_SESSION['FechaHoraUltimaConexionAnterior'] = $oUsuario->T01_FechaHoraUltimaConexion;
     header('Location: programa.php');
-    die();
+    exit();
 } else {
-    if (isset($_REQUEST['registro'])) {
-        header('Location: registro.php');
-        exit();
-    }
     ?>
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html>
         <head>
             <meta charset="UTF-8">
@@ -114,11 +121,15 @@ if ($entradaOk) {
                     <table class="formulario">
                         <tr>
                             <td><label for="usuario">Usuario:</label></td>
-                            <td><input type="text" name="usuario" class="usuario"/></td>
+                            <td><input style="background-color:yellow;" type="text" name="usuario" class="usuario"/></td>
                         </tr>
                         <tr>
                             <td><label for="password">Password:</label></td>
-                            <td><input type="password" name="password" class="password" /></td>
+                            <td><input style="background-color:yellow;" type="password" name="password" class="password" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="nombre">Nombre:</label></td>
+                            <td><input style="background-color:yellow;" type="text" name="nombre" class="nombre" /></td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -128,18 +139,15 @@ if ($entradaOk) {
                                     <option value="gb"><img src="../doc/img/gb.png" alt="Inglés"/>Inglés</option>
                                 </select>
                             </td>
-
                         </tr>
-                        <tr><td colspan="2"><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td></tr>
                         <tr>
-                            <td colspan="2"><input type="submit" id="registro" name="registro" value="Registrarse"></td>
+                            <td><input type="submit" id="iniciarSesion" value="Iniciar Sesion" name="iniciarSesion"></td>
+                            <td><input type="submit" value="Volver" name="volver" id="volver"></td>
                         </tr>
                     </table>
                 </form>
             </div>
-            <?php
-        }
-        ?>
+            
         <footer> 
             <a href="../../doc/CVDavidAparicioSir.pdf" target="blank"><img src="../doc/img/cv.png" alt="CV David Aparicio"/></a>
             <a href="../../201DWESProyectoDWES/indexProyectoDWES.php"><img src="../doc/img/home.png" alt="HOME"/></a>
@@ -148,3 +156,6 @@ if ($entradaOk) {
         </footer>
     </body>
 </html>
+<?php
+    }
+?>
