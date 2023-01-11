@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../core/221024libreriaValidacionFormularios.php';
-require_once '../conf/confDBPDODesarrollo.php';
+require_once '../conf/confDBPDO.php';
     if (isset($_REQUEST['volver'])) {
         header('Location: programa.php');
         exit();

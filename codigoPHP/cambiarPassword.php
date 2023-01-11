@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../core/221024libreriaValidacionFormularios.php';
-require_once '../conf/confDBPDODesarrollo.php';
+require_once '../conf/confDBPDO.php';
 //comprobamos que el usuario está logeado si no lo redirigimos al login
 if(is_null($_SESSION['usuarioDAW201AppLoginLogoff'])){
     header('Location: login.php');
